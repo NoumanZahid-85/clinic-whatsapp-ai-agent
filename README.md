@@ -64,16 +64,16 @@ The system follows a **polyglot microservices architecture** with three distinct
 |  +---------------------------------------------------------------+  |
 |  |               AI REASONING LAYER  (Python)                    |  |
 |  |                                                               |  |
-|  |   +-----------------+    +------------------------------+    |  |
-|  |   |   Vector Store   |<---|     LangGraph ReAct Agent     |    |  |
-|  |   |  (ChromaDB RAG)  |--->|    (Core Orchestrator)        |    |  |
+|  |   +-----------------+    +------------------------------+     |  |
+|  |   |   Vector Store   |<---|     LangGraph ReAct Agent     |   |  |
+|  |   |  (ChromaDB RAG)  |--->|    (Core Orchestrator)        |   |  |
 |  |   +-----------------+    +------+----------+-------------+    |  |
 |  |         Tool: RAG Query         |          |                  |  |
 |  |                          Conversation   Tool: Update          |  |
 |  |                                 |       User Facts            |  |
-|  |   +-----------------+    +------v--+  +--v--------------+    |  |
-|  |   |  Short-Term Mem  |<-->| Buffer  |  |  Long-Term Mem   |    |  |
-|  |   |  (Chat History)  |    | (10msg) |  | (User Profiles)  |    |  |
+|  |   +-----------------+    +------v--+  +--v--------------+     |  |
+|  |   |  Short-Term Mem  |<-->| Buffer  |  |  Long-Term Mem   |   |  |
+|  |   |  (Chat History)  |    | (10msg) |  | (User Profiles)  |   |  |
 |  |   +-----------------+    +---------+  +------------------+    |  |
 |  +---------------------------------------------------------------+  |
 |                              ^                                      |
@@ -83,16 +83,16 @@ The system follows a **polyglot microservices architecture** with three distinct
 |  +---------------------------+-----------------------------------+  |
 |  |              WHATSAPP LAYER  (Node.js)                        |  |
 |  |                                                               |  |
-|  |   +-----------------+    +------------------------------+    |  |
-|  |   |  Baileys Gateway |<-->|    Main Controller            |    |  |
-|  |   |  (WebSocket)     |    |  (Session Manager)            |    |  |
+|  |   +-----------------+    +------------------------------+     |  |
+|  |   |  Baileys Gateway |<-->|    Main Controller            |   |  |
+|  |   |  (WebSocket)     |    |  (Session Manager)            |   |  |
 |  |   +--------+---------+    +------------------------------+    |  |
 |  |            |                                                  |  |
 |  |            v                                                  |  |
-|  |   +-----------------+                                        |  |
+|  |   +-----------------+                                         |  |
 |  |   |  WhatsApp User   |                                        |  |
 |  |   |  (Mobile App)    |                                        |  |
-|  |   +-----------------+                                        |  |
+|  |   +-----------------+                                         |  |
 |  +---------------------------------------------------------------+  |
 +---------------------------------------------------------------------+
 ```
