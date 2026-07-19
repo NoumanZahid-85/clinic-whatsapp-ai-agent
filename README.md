@@ -1,3 +1,5 @@
+<div align="center">
+
 ---
 
 # Table of Contents
@@ -36,15 +38,15 @@ The system is built as a **polyglot microservices architecture**, with the AI re
 
 ## ✨ Key Features
 
-| Feature                            | Description                                                                                                                      |
-| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| Feature                                  | Description                                                                                                                      |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | **RAG-Powered Q&A**                | Answers clinic-specific questions by searching a vectorized knowledge base, not by hallucinating.                                |
 | **Persistent User Memory**         | Remembers patient names, ages, preferences, and personal facts across sessions using a JSON-backed profile store.                |
 | **Short-Term Conversation Buffer** | Maintains the last 10 messages per user for fluid, context-aware dialogue.                                                       |
 | **Agentic Tool Use**               | Uses a LangGraph ReAct agent that autonomously decides when to search the knowledge base, update a user profile, or simply chat. |
 | **Auto-Reconnecting Gateway**      | The Baileys WebSocket gateway automatically reconnects after network drops, keeping the bot online 24/7.                         |
-| **Human-Like Response Timing**     | Introduces a randomized 2–5 second delay before replying to simulate natural typing speed and avoid detection.                   |
-| **Swagger API Docs**               | The FastAPI server auto-generates interactive API documentation at`/docs` for testing and debugging.                             |
+| **Human-Like Response Timing**     | Introduces a randomized 2-5 second delay before replying to simulate natural typing speed and avoid detection.                   |
+| **Swagger API Docs**               | The FastAPI server auto-generates interactive API documentation at`/docs` for testing and debugging.                           |
 | **Graceful Error Handling**        | If the AI server is offline, the gateway sends a user-friendly error message instead of crashing.                                |
 
 ---
@@ -63,18 +65,17 @@ The system follows a **polyglot microservices architecture** (also called "The P
 │  ┌───────────────────────────────────────────────────────────────┐  │
 │  │               AI REASONING LAYER  (Python)                    │  │
 │  │                                                               │  │
-│  │   ┌─────────────────┐    ┌──────────────────────────────┐     │  │
-│  │   │   Vector Store  │◄───│     LangGraph ReAct Agent    │     │  │
-│  │   │  (ChromaDB RAG) │───►│    (Core Orchestrator)       │     │  │
-│  │   └─────────────────┘    └──────┬──────────┬────────────┘     │  │
+│  │   ┌─────────────────┐     ┌──────────────────────────────┐    │  │
+│  │   │   Vector Store  │◄─── │     LangGraph ReAct Agent    │    │  │
+│  │   │  (ChromaDB RAG) │───► │    (Core Orchestrator)       │    │  │
+│  │   └─────────────────┘     └──────┬──────────┬─────────────┘   │  │
 │  │         Tool: RAG Query         │          │                  │  │
 │  │                          Conversation   Tool: Update          │  │
 │  │                                 │       User Facts            │  │
 │  │   ┌─────────────────┐     ┌──────▼──┐  ┌──▼──────────────┐    │  │
-│  │   │  Short-Term Mem │◄──► │ Buffer  │  │  Long-Term Mem  │    │  │
-│  │   │  (Chat History) │     │ (10msg) │  │ (User Profiles) │    │  │
-│  │   └─────────────────┘     └─────────┘  └─────────────────┘    │  │
-│  │                                                               │  │
+│  │   │  Short-Term Mem │◄──► │ Buffer  │  │  Long-Term Mem   │   │  │
+│  │   │  (Chat History) │     │ (10msg) │  │ (User Profiles)  │   │  │
+│  │   └─────────────────┘     └─────────┘  └──────────────────┘   │  │
 │  └───────────────────────────────────────────────────────────────┘  │
 │                              ▲                                      │
 │                    REST API  │  POST /process-message               │
@@ -83,7 +84,7 @@ The system follows a **polyglot microservices architecture** (also called "The P
 │  ┌───────────────────────────┴───────────────────────────────────┐  │
 │  │              WHATSAPP LAYER  (Node.js)                        │  │
 │  │                                                               │  │
-    │  │   ┌──────────────────┐    ┌──────────────────────────────┐    │  │
+│  │   ┌─────────────────┐     ┌──────────────────────────────┐    │  │
 │  │   │  Baileys Gateway │◄──►│    Main Controller           │    │  │
 │  │   │  (WebSocket)     │    │  (Session Manager)           │    │  │
 │  │   └────────┬─────────┘    └──────────────────────────────┘    │  │
@@ -109,7 +110,7 @@ sequenceDiagram
     participant M as Memory Store (JSON)
 
     U->>B: Sends WhatsApp message
-    B->>F: POST /process-message with sender_id, text
+    B->>F: POST /process-message {sender_id, text}
     F->>A: run_agent(sender_id, message)
 
     Note over A: Agent evaluates message intent
@@ -139,37 +140,37 @@ sequenceDiagram
 
 ### AI Core (Python)
 
-| Technology                 | Purpose                                                                                        |
-| -------------------------- | ---------------------------------------------------------------------------------------------- |
-| **Python 3.11+**           | Primary language for all AI logic                                                              |
-| **FastAPI**                | High-performance async REST API server                                                         |
-| **Uvicorn**                | ASGI server to run FastAPI                                                                     |
-| **LangChain**              | Framework for chaining LLM calls, tools, and prompts                                           |
-| **LangGraph**              | Stateful agent orchestration with the ReAct pattern                                            |
-| **ChromaDB**               | Local vector database for storing and searching document embeddings                            |
+| Technology                       | Purpose                                                                                          |
+| -------------------------------- | ------------------------------------------------------------------------------------------------ |
+| **Python 3.11+**           | Primary language for all AI logic                                                                |
+| **FastAPI**                | High-performance async REST API server                                                           |
+| **Uvicorn**                | ASGI server to run FastAPI                                                                       |
+| **LangChain**              | Framework for chaining LLM calls, tools, and prompts                                             |
+| **LangGraph**              | Stateful agent orchestration with the ReAct pattern                                              |
+| **ChromaDB**               | Local vector database for storing and searching document embeddings                              |
 | **HuggingFace Embeddings** | `sentence-transformers/all-MiniLM-L6-v2` for generating text embeddings locally (no API calls) |
 | **OpenAI-compatible LLM**  | Proxied through a local FreeLLM endpoint (`gpt-4o-mini`)                                       |
-| **Pydantic**               | Request/response schema validation                                                             |
-| **python-dotenv**          | Environment variable management                                                                |
+| **Pydantic**               | Request/response schema validation                                                               |
+| **python-dotenv**          | Environment variable management                                                                  |
 
 ### WhatsApp Gateway (Node.js)
 
-| Technology                  | Purpose                                                           |
-| --------------------------- | ----------------------------------------------------------------- |
+| Technology                        | Purpose                                                           |
+| --------------------------------- | ----------------------------------------------------------------- |
 | **Node.js 20+**             | Runtime for the WhatsApp connection layer                         |
 | **@whiskeysockets/baileys** | WhatsApp Web API client using WebSockets (no official API needed) |
 | **axios**                   | HTTP client for communicating with the Python AI server           |
 | **qrcode-terminal**         | Renders QR codes in the terminal for WhatsApp authentication      |
 | **pino**                    | High-performance JSON logger                                      |
-| **dotenv**                  | Shared`.env` configuration loading                                |
+| **dotenv**                  | Shared`.env` configuration loading                              |
 
 ### Infrastructure & Storage
 
-| Technology          | Purpose                                                       |
-| ------------------- | ------------------------------------------------------------- |
+| Technology                | Purpose                                                         |
+| ------------------------- | --------------------------------------------------------------- |
 | **ChromaDB**        | Persistent vector store at`./data/chroma_db`                  |
 | **JSON File**       | Lightweight long-term user memory at`./data/user_memory.json` |
-| **REST API (HTTP)** | Inter-service communication between Node.js and Python        |
+| **REST API (HTTP)** | Inter-service communication between Node.js and Python          |
 
 ---
 
@@ -233,7 +234,7 @@ The core intelligence module. Contains:
   - `get_user_profile` — retrieves everything the bot remembers about the current user
 - **Personal info detector** (`_detect_personal_info`) — a rule-based parser that extracts structured facts from natural language (e.g., "My name is Nouman" → `{"name": "Nouman"}`)
 - **System prompt** — instructs the LLM to act as a CityCare clinic assistant with specific behavioral guidelines
-- **Human-like delay** — a random 2–5 second sleep before returning, simulating realistic response timing
+- **Human-like delay** — a random 2-5 second sleep before returning, simulating realistic response timing
 
 #### `rag.py` — RAG Pipeline
 
@@ -473,10 +474,10 @@ On first run:
 
 ## 📡 API Reference
 
-| Method | Endpoint           | Description               | Request Body                          | Response           |
-| ------ | ------------------ | ------------------------- | ------------------------------------- | ------------------ |
-| `GET`  | `/`                | Redirects to Swagger docs | —                                     | `302` → `/docs`    |
-| `GET`  | `/health`          | Health check              | —                                     | `{"status": "ok"}` |
+| Method   | Endpoint             | Description               | Request Body                            | Response             |
+| -------- | -------------------- | ------------------------- | --------------------------------------- | -------------------- |
+| `GET`  | `/`                | Redirects to Swagger docs | —                                      | `302` → `/docs` |
+| `GET`  | `/health`          | Health check              | —                                      | `{"status": "ok"}` |
 | `POST` | `/process-message` | Process a user message    | `{"sender_id": "str", "text": "str"}` | `{"reply": "str"}` |
 
 ### Example Request
@@ -494,21 +495,21 @@ curl -X POST http://localhost:8000/process-message \
 ```
  clinic_info.md                    ChromaDB
 ┌──────────────┐    Chunking     ┌──────────────────┐
-│  4,753 bytes │───────────────► │  ~20 chunks      │
-│  of clinic   │  500 chars ea.  │  each embedded as│
-│  information │  80 overlap     │  384-dim vector  │
-└──────────────┘                 └────────┬─────────┘
-                                          │
-             User Query                   │  Similarity
-        "What are your fees?"             │  Search (top 3)
-                │                         │
-                ▼                         ▼
-        ┌───────────────┐        ┌───────────────-┐
-        │ Embed query   │───────►│ Return chunks  │
-        │ (MiniLM-L6)   │        │ about pricing  │
-        └───────────────┘        └───────-┬───────┘
-                                          │
-                                          ▼
+│  4,753 bytes │───────────────►│  ~20 chunks       │
+│  of clinic   │  500 chars ea. │  each embedded as │
+│  information │  80 overlap    │  384-dim vector   │
+└──────────────┘                └────────┬─────────┘
+                                         │
+             User Query                  │  Similarity
+        "What are your fees?"            │  Search (top 3)
+                │                        │
+                ▼                        ▼
+        ┌───────────────┐        ┌───────────────┐
+        │ Embed query   │───────►│ Return chunks │
+        │ (MiniLM-L6)   │        │ about pricing │
+        └───────────────┘        └───────┬───────┘
+                                         │
+                                         ▼
                                  ┌───────────────┐
                                  │ LLM generates │
                                  │ natural reply │
@@ -545,8 +546,8 @@ The RAG pipeline never generates answers from thin air. Every clinic-related res
 
 ## ⚖ Why Microservices over a Monolith
 
-| Microservices (This Project)                                                      | Monolith (Alternative)                          |
-| --------------------------------------------------------------------------------- | ----------------------------------------------- |
+| Microservices (This Project)                                                             | Monolith (Alternative)                          |
+| ---------------------------------------------------------------------------------------- | ----------------------------------------------- |
 | **Separation of Concerns** — a WhatsApp disconnect does not crash the AI server   | One error can bring down the entire application |
 | **Language Best-in-Class** — Node.js for real-time WebSockets, Python for AI/ML   | Forced to compromise on one language            |
 | **Independent Scaling** — the AI server and gateway can run on separate machines  | Difficult to scale individual components        |
@@ -568,5 +569,4 @@ The RAG pipeline never generates answers from thin air. Every clinic-related res
 
 ---
 
-
-
+<div align="center">
