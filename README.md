@@ -1,5 +1,3 @@
-<div align="center">
-
 ---
 
 ## 📑 Table of Contents
@@ -76,8 +74,8 @@ The system follows a **polyglot microservices architecture** (also called "The P
 │  │   ┌─────────────────┐     ┌──────▼──┐  ┌──▼──────────────┐    │  │
 │  │   │  Short-Term Mem │◄──► │ Buffer  │  │  Long-Term Mem  │    │  │
 │  │   │  (Chat History) │     │ (10msg) │  │ (User Profiles) │    │  │
-│  │   └─────────────────┘     └─────────┘  └─────────────────┘    |  |
-│  │															   |  |
+│  │   └─────────────────┘     └─────────┘  └─────────────────┘    │  │
+│  │                                                               │  │
 │  └───────────────────────────────────────────────────────────────┘  │
 │                              ▲                                      │
 │                    REST API  │  POST /process-message               │
@@ -86,7 +84,7 @@ The system follows a **polyglot microservices architecture** (also called "The P
 │  ┌───────────────────────────┴───────────────────────────────────┐  │
 │  │              WHATSAPP LAYER  (Node.js)                        │  │
 │  │                                                               │  │
-│  │   ┌───────────────-──┐    ┌──────────────────────────────┐    │  │
+    │  │   ┌──────────────────┐    ┌──────────────────────────────┐    │  │
 │  │   │  Baileys Gateway │◄──►│    Main Controller           │    │  │
 │  │   │  (WebSocket)     │    │  (Session Manager)           │    │  │
 │  │   └────────┬─────────┘    └──────────────────────────────┘    │  │
@@ -104,15 +102,15 @@ The system follows a **polyglot microservices architecture** (also called "The P
 
 ```mermaid
 sequenceDiagram
-    participant U as 📱 WhatsApp User
-    participant B as 🔌 Baileys Gateway (Node.js)
-    participant F as ⚡ FastAPI Server (Python)
-    participant A as 🤖 LangGraph ReAct Agent
-    participant R as 📚 ChromaDB (RAG)
-    participant M as 🧠 Memory Store (JSON)
+    participant U as WhatsApp User
+    participant B as Baileys Gateway (Node.js)
+    participant F as FastAPI Server (Python)
+    participant A as LangGraph ReAct Agent
+    participant R as ChromaDB (RAG)
+    participant M as Memory Store (JSON)
 
     U->>B: Sends WhatsApp message
-    B->>F: POST /process-message<br/>{sender_id, text}
+    B->>F: POST /process-message with sender_id, text
     F->>A: run_agent(sender_id, message)
 
     Note over A: Agent evaluates message intent
@@ -123,16 +121,16 @@ sequenceDiagram
     else Personal info detected
         A->>M: update_user_profile(facts)
         M-->>A: Confirmation
-    else User asks "What do you know about me?"
+    else User asks about known info
         A->>M: get_user_profile()
         M-->>A: Stored user facts
     else Casual conversation
-        Note over A: Responds directly<br/>(no tool call)
+        Note over A: Responds directly (no tool call)
     end
 
     A-->>F: AI-generated reply
-    Note over F: Random 2-5s delay<br/>(human-like timing)
-    F-->>B: {reply: "..."}
+    Note over F: Random 2-5s delay (human-like timing)
+    F-->>B: reply message
     B->>U: Sends WhatsApp reply
 ```
 
@@ -571,4 +569,5 @@ The RAG pipeline never generates answers from thin air. Every clinic-related res
 
 ---
 
-<div align="center">
+
+
