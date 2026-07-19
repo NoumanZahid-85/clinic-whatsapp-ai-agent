@@ -1,0 +1,20 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Data
+data/
+
+# Node
+whatsapp_gateway/node_modules/
+whatsapp_gateway/auth_info/
+whatsapp_gateway/baileys.log
+
+# Environment
+.env
+
+# IDE
+.vscode/
+.idea/
