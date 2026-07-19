@@ -1,6 +1,6 @@
 ---
 
-## 📑 Table of Contents
+# Table of Contents
 
 - [Overview](#-overview)
 - [Key Features](#-key-features)
@@ -24,7 +24,6 @@
 - [Two-Tier Memory System](#-two-tier-memory-system)
 - [Why Microservices over a Monolith](#-why-microservices-over-a-monolith)
 - [Future Improvements](#-future-improvements)
-
 ---
 
 ## 🔍 Overview
